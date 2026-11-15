@@ -1,0 +1,49 @@
+name: Update GoWild catalog
+
+on:
+  schedule:
+    # Every 30 minutes. GitHub may start the job a few minutes late.
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: catalog-tick
+  cancel-in-progress: false
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check the next Frontier routes
+        run: npm run catalog:tick
+        env:
+          CATALOG_SEARCHES: "8"
+
+      - name: Save the catalog
+        run: |
+          git add data/chicago-week.json
+          if git diff --cached --quiet; then
+            echo "No catalog changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update Chicago GoWild catalog"
+          git pull --rebase origin main
+          git push

@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  /* docs/design.md "Design Foundations": near-black, not pure black — pure
+     black reads harshly against white text. One elevated surface tone for
+     cards/rows; separation comes from tone, not borders. */
+  --color-background: #f6f5f2;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f3f1ec;
+  --color-border: #e4e1d8;
+
+  --color-foreground: #1c1917;
+  --color-foreground-muted: #57534e;
+  --color-foreground-subtle: #a8a29e;
+
+  /* The single accent color in the whole app — reserved for primary actions
+     and the "recently released" signal only (docs/design.md §3). */
+  --color-accent: #1d4ed8;
+  --color-accent-foreground: #ffffff;
+
+  --color-danger: #ef4444;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+  }
+}
